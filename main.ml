@@ -6,14 +6,12 @@ let rec map f l =
     |h::t -> f h :: map f t
 
 
-
-
 let string_list_to_string l = String.trim (String.concat "" l)
 
 
-(*obtiene las lineas de un archivo y devuelve un string*)
-(* channel -> string *)
-let read_file filename =
+(*obtiene las lineas de un archivo y devuelve un string list*)
+(* channel -> string list *)
+let file_to_string_list filename =
   let lines = ref [] in
   let chan = open_in filename in
     try
@@ -24,15 +22,17 @@ let read_file filename =
         close_in chan; 
         List.rev !lines
 
+(*String list -> string*)
+let read_file filename = 
+  string_list_to_string (file_to_string_list filename)
+
+let code_to_file output_name code=
+  let chan = open_out output_name in
+    output_string chan code;
+    close_out chan
+
 let filename = Array.get Sys.argv 1
+let output_file = Array.get Sys.argv 2
 
 let _ = 
-  let token_list = ref [] in
-  let string_list = read_file filename in
-  let strg = string_list_to_string string_list in
-  token_list := Lexer.lex (strg); !token_list;
-  map (print_string) (map (Lexer.token_to_string) (List.rev !token_list))
-
-
-(*map (print_string) (map (Lexer.token_to_string) ( ))*)
-
+  filename |> read_file |> Lexer.lex |> Parser.parse |> Generator.gen |> code_to_file output_file

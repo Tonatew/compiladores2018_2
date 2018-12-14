@@ -1,0 +1,27 @@
+---------------------para compilar----------------------------
+
+ocaml -o <nombre ejecutable> str.cma <archivo>.ml [<archivo2>.ml ...]
+
+Para ast y tokenTypes:
+
+
+ocamlopt -c tokenTypes.ml
+ocamlopt -c ast.ml
+
+
+ocamlc -o compiler str.cma lexer.ml parser.ml generator.ml main.ml
+
+
+
+
+
+------------para ejecutar en el interprete------------------
+STR:
+#load "str.cma"
+
+archivos:
+#use "tokenTypes.ml";;
+#use "lexer.ml";;
+#use "ast.ml";;
+#use "parser.ml";;
+#use "generator.ml";;

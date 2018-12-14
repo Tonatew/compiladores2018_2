@@ -1,3 +1,4 @@
+open TokenTypes
 (*----------Funciones no relacionadas con el programa principal---------*)
 
 (*Recibe una linea (string) y regresa una lista de tokens*)
@@ -78,10 +79,12 @@ and lex_rest char_list =
       | '('::rest -> OpenParen::(lex_rest rest)
       | ')'::rest -> CloseParen::(lex_rest rest)
       | ';'::rest -> Semicolon::(lex_rest rest)
+      | '-'::rest -> Negation::(lex_rest rest)
+      | '~'::rest -> BitwiseComp::(lex_rest rest)
+      | '!'::rest -> LogicNegation::(lex_rest rest)
       |otherChar::tail ->
           if ((Char.equal ' ' otherChar) || (Char.equal '\r' otherChar)) then lex_rest tail
           else lex_numbers_ids char_list
-
 
 (*tokeniza los caracteres de una cadena de texto*)
 (*string -> unit*)
@@ -92,14 +95,16 @@ let lex linea =
 (* recibe un token y lo imprime*)
 (*token -> string*)
 let token_to_string t =
-  let open TokenTypes in
-    match t with
-      | OpenBrace -> "{ "
-      | CloseBrace -> "} "
-      | OpenParen -> "( "
-      | CloseParen -> ") "
-      | Semicolon -> "; "
-      | IntKeyword -> "INT "
-      | ReturnKeyword -> "RETURN "
-      | Int i -> Printf.sprintf "INT<%d> " i
-      | Id id -> Printf.sprintf "ID<%s> " id
+  match t with
+    | OpenBrace -> "{ "
+    | CloseBrace -> "} "
+    | OpenParen -> "( "
+    | CloseParen -> ") "
+    | Semicolon -> "; "
+    | IntKeyword -> "INT "
+    | ReturnKeyword -> "RETURN "
+    | Negation -> "-"
+    | BitwiseComp -> "~"
+    | LogicNegation -> "!"
+    | Int i -> Printf.sprintf "INT<%d> " i
+    | Id id -> Printf.sprintf "ID<%s> " id

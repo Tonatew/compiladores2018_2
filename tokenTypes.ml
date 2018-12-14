@@ -1,11 +1,13 @@
-(* A token in a C progrm *)
 type token =
-    | IntKeyword
-    | ReturnKeyword
-    | Int of int
-    | Id of string
-    | OpenParen
-    | CloseParen
     | OpenBrace
     | CloseBrace
+    | OpenParen
+    | CloseParen
     | Semicolon
+    | IntKeyword
+    | ReturnKeyword
+    | Negation
+    | BitwiseComp
+    | LogicNegation
+    | Int of int
+    | Id of string
